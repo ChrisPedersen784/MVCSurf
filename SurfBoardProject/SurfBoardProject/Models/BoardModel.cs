@@ -19,6 +19,7 @@ namespace SurfBoardProject.Models
         public string? BoardDescription { get; set; }
         public double Price { get; set; }
         public string? Equipment { get; set; }
+        public int IsAvailable { get; set; } = 0; 
 
     }
 }

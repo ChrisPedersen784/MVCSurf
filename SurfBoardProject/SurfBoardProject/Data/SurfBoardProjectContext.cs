@@ -15,5 +15,7 @@ namespace SurfBoardProject.Data
         }
 
         public DbSet<SurfBoardProject.Models.BoardModel> BoardModel { get; set; } = default!;
+        public DbSet<SurfBoardProject.Models.Rental> Rental { get; set; } = default!;
+        public DbSet<SurfBoardProject.Models.Customer> Customer { get; set; } = default!;
     }
 }

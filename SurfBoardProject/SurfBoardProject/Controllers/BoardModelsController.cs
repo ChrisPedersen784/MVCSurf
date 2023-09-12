@@ -80,11 +80,52 @@ namespace SurfBoardProject.Controllers
                 CreateAsync(boards.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
+        //GET: BoardModel/Book
+        public async Task<IActionResult> Book()
+        {
+            //If any of the IsAvailable properties are 1 then disable the board in the list
+            IEnumerable<BoardModel> obj = _context.BoardModel.ToList();
+                return View(obj);
+        }
+
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateBooking(int id, BoardModel boardModel)
+        {
+            if (id != boardModel.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    boardModel.IsAvailable = 1;
+                    _context.Update(boardModel);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!BoardModelExists(boardModel.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("Create", "Rentals");
+            }
+            return Redirect("Book");
+        }
 
 
 
         // GET: BoardModels/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> ShowBookingDetails(int? id)
         {
             if (id == null || _context.BoardModel == null)
             {
@@ -100,6 +141,7 @@ namespace SurfBoardProject.Controllers
 
             return View(boardModel);
         }
+
 
         // GET: BoardModels/Create
         public IActionResult Create()
