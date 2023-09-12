@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,7 @@ namespace SurfBoardProject.Controllers
         // GET: BoardModels
         //Responds to a HTTP Get Request
         // This action method handles requests to the Index view with sorting, filtering, and pagination parameters
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
             // Setting up sorting parameters for the view
@@ -79,7 +81,7 @@ namespace SurfBoardProject.Controllers
             return View(await PaginatedList<BoardModel>.
                 CreateAsync(boards.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
-
+        [Authorize(Roles = "Customer")]
         //GET: BoardModel/Book
         public async Task<IActionResult> Book()
         {

@@ -22,6 +22,7 @@ namespace SurfBoardProject
                 options.UseSqlServer(builder.Configuration.GetConnectionString("SurfBoardProjectContext") ?? throw new InvalidOperationException("Connection string 'SurfBoardProjectContext' not found.")));
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                  .AddRoles<IdentityRole>() // Add support for roles
     .AddEntityFrameworkStores<SurfBoardProjectContext>();
 
             // Add services to the container.
@@ -65,6 +66,32 @@ namespace SurfBoardProject
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.MapRazorPages();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                // create roles
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                var roles = new[] { "Admin", "Customer" };
+                foreach (var role in roles)
+                {
+
+                    // check if role exists and if they dont create them
+                    if (!roleManager.RoleExistsAsync("Customer").Result)
+                    {
+                        roleManager.CreateAsync(new IdentityRole("Customer")).Wait();
+                    }
+
+                    if (!roleManager.RoleExistsAsync("Admin").Result)
+                    {
+                        roleManager.CreateAsync(new IdentityRole("Admin")).Wait();
+                    }
+                }
+
+                // SeedData.Initialize(services); 
+            }
+
             app.Run();
         }
 
