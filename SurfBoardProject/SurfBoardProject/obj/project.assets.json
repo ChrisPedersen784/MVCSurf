@@ -11182,11 +11182,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\chris\\OneDrive\\Desktop\\ASP.Net\\SurfBoardProject\\SurfBoardProject\\SurfBoardProject.csproj",
+      "projectUniqueName": "C:\\Users\\chris\\OneDrive\\Desktop\\Git Repository\\MVCSurf\\SurfBoardProject\\SurfBoardProject\\SurfBoardProject.csproj",
       "projectName": "SurfBoardProject",
-      "projectPath": "C:\\Users\\chris\\OneDrive\\Desktop\\ASP.Net\\SurfBoardProject\\SurfBoardProject\\SurfBoardProject.csproj",
+      "projectPath": "C:\\Users\\chris\\OneDrive\\Desktop\\Git Repository\\MVCSurf\\SurfBoardProject\\SurfBoardProject\\SurfBoardProject.csproj",
       "packagesPath": "C:\\Users\\chris\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\chris\\OneDrive\\Desktop\\ASP.Net\\SurfBoardProject\\SurfBoardProject\\obj\\",
+      "outputPath": "C:\\Users\\chris\\OneDrive\\Desktop\\Git Repository\\MVCSurf\\SurfBoardProject\\SurfBoardProject\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\chris\\AppData\\Roaming\\NuGet\\NuGet.Config",
