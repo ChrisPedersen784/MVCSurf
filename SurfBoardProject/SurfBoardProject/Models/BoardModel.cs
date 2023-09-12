@@ -21,9 +21,7 @@ namespace SurfBoardProject.Models
         public string? Equipment { get; set; }
         public int IsAvailable { get; set; } = 0;
 
-
-        //public int RentalId { get; set; }
-        //public Rental Rental { get; set; }
+        public ICollection<Rental>? Rentals { get; set; }
 
     }
 }

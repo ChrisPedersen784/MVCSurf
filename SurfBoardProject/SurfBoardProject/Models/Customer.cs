@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SurfBoardProject.Models
 {
     public class Customer
     {
+        [Key]
         public int CustomerId { get; set; }
         [NotMapped]
         public int CustomerNumber { get; set; }
@@ -12,7 +14,6 @@ namespace SurfBoardProject.Models
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
 
-        public int? RentalId { get; set; }
-        public Rental? Rental { get; set; }
+        public ICollection<Rental>? Rentals { get; set; }
     }
 }

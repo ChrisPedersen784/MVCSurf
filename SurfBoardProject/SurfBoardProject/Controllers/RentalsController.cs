@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
 using SurfBoardProject.Data;
 using SurfBoardProject.Models;
 using SurfBoardProject.Utility;
@@ -24,9 +25,9 @@ namespace SurfBoardProject.Controllers
         // GET: Rentals
         public async Task<IActionResult> Index()
         {
-              return _context.Rental != null ? 
-                          View(await _context.Rental.ToListAsync()) :
-                          Problem("Entity set 'SurfBoardProjectContext.Rental'  is null.");
+            return _context.Rental != null ?
+                        View(await _context.Rental.ToListAsync()) :
+                        Problem("Entity set 'SurfBoardProjectContext.Rental'  is null.");
         }
 
         // GET: Rentals/Details/5
@@ -47,10 +48,12 @@ namespace SurfBoardProject.Controllers
             return View(rental);
         }
 
-      
+
         // GET: Rentals/Create
         public IActionResult Create()
         {
+
+
             return View();
         }
 
@@ -59,15 +62,30 @@ namespace SurfBoardProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RentalId,Start,End,Price,TotalPrice, Boards")] Rental rental, int boardId)
+        public async Task<IActionResult> Create([Bind("RentalId,Start,End,Price")] Rental rental)
         {
-            
+
+
+            //if (IdentityKeys.CustomerID != null && IdentityKeys.BoardID != null)
+            //{
+            //    // Fetch the BoardModel and Customer entities based on their IDs
+            //    var selectedBoard = _context.BoardModel.Find(IdentityKeys.BoardID);
+            //    var selectedCustomer = _context.Customer.Find(IdentityKeys.CustomerID);
+
+            //    if (selectedBoard != null && selectedCustomer != null)
+            //    {
+            //        // Add the selected BoardModel and Customer to the Rental's collections
+            //        rental.Boards.Add(selectedBoard);
+            //        rental.Customers.Add(selectedCustomer);
+            //    }
+            //}
+
             if (ModelState.IsValid)
             {
-                
                 _context.Add(rental);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                IdentityKeys.RentalID = rental.RentalId;
+                return RedirectToAction("Book", "BoardModels");
             }
             return View(rental);
         }
@@ -155,14 +173,14 @@ namespace SurfBoardProject.Controllers
             {
                 _context.Rental.Remove(rental);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool RentalExists(int id)
         {
-          return (_context.Rental?.Any(e => e.RentalId == id)).GetValueOrDefault();
+            return (_context.Rental?.Any(e => e.RentalId == id)).GetValueOrDefault();
         }
     }
 }

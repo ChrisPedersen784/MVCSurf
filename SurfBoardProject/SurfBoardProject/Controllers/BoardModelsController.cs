@@ -27,7 +27,7 @@ namespace SurfBoardProject.Controllers
         // GET: BoardModels
         //Responds to a HTTP Get Request
         // This action method handles requests to the Index view with sorting, filtering, and pagination parameters
-        [Authorize(Roles = "Admin")]
+       // [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
             // Setting up sorting parameters for the view
@@ -81,10 +81,11 @@ namespace SurfBoardProject.Controllers
             return View(await PaginatedList<BoardModel>.
                 CreateAsync(boards.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
-        [Authorize(Roles = "Customer")]
+       // [Authorize(Roles = "Customer")]
         //GET: BoardModel/Book
-        public async Task<IActionResult> Book()
+        public async Task<IActionResult> Book(BoardModel board)
         {
+            IdentityKeys.BoardID = board.Id;
             //If any of the IsAvailable properties are 1 then disable the board in the list
             IEnumerable<BoardModel> obj = _context.BoardModel.ToList();
                 return View(obj);
@@ -105,6 +106,7 @@ namespace SurfBoardProject.Controllers
                 try
                 {
                     boardModel.IsAvailable = 1;
+                    IdentityKeys.BoardID = id;
                     _context.Update(boardModel);
                     await _context.SaveChangesAsync();
                 }

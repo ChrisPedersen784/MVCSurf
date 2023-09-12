@@ -64,7 +64,7 @@
                 @Html.DisplayFor(modelItem => item.Equipment)
             </td>
             <td>
-                    <a class="btn btn-primary" asp-controller="BoardModels" asp-action="ShowBookingDetails" asp-route-id="@item.Id">Book</a>
+                    <a class="btn btn-primary" asp-controller="Customers" asp-action="Create" asp-route-id="@item.Id">Book</a>
             </td>
         </tr>
 }

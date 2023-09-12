@@ -117,7 +117,7 @@ namespace SurfBoardProject.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     var user = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
-                    UserIdentity.UserID = user.Id;
+                    IdentityKeys.UserID = user.Id;
                     
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);

@@ -22,9 +22,9 @@ namespace SurfBoardProject.Controllers
         // GET: Customers
         public async Task<IActionResult> Index()
         {
-              return _context.Customer != null ? 
-                          View(await _context.Customer.ToListAsync()) :
-                          Problem("Entity set 'SurfBoardProjectContext.Customer'  is null.");
+            return _context.Customer != null ?
+                        View(await _context.Customer.ToListAsync()) :
+                        Problem("Entity set 'SurfBoardProjectContext.Customer'  is null.");
         }
 
         // GET: Customers/Details/5
@@ -51,21 +51,56 @@ namespace SurfBoardProject.Controllers
             return View();
         }
 
-        // POST: Customers/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //POST: Customers/Create
+        //To protect from overposting attacks, enable the specific properties you want to bind to.
+        //For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CustomerId,Name,LastName,Email,PhoneNumber")] Customer customer)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(customer);
+                // Create a new Rental
+                var newRental = new Rental
+                {
+                    Start = DateTime.Now,    // Set the start date/time of the rental
+                    End = DateTime.Now.AddDays(7),  // Set the end date/time of the rental (e.g., 7 days from now)
+                    Price = 100             // Set the rental price
+                };
+
+                // Associate the new Customer with the new Rental
+                newRental.Customers = new List<Customer> { customer };
+
+                // Add the new Customer and the new Rental to the DbContext
+                _context.Customer.Add(customer);
+                _context.Rental.Add(newRental);
+
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                TempData["Success"] = "Surfboard successfully booked";
+                IdentityKeys.CustomerID = customer.CustomerId;
+
+                return RedirectToAction("Create", "Rentals");
             }
             return View(customer);
         }
+
+        //public async Task<IActionResult> Create([Bind("CustomerId,Name,LastName,Email,PhoneNumber")] Customer customer)
+        //{
+
+        //    if (ModelState.IsValid)
+        //    {
+
+        //        _context.Add(customer);
+        //        await _context.SaveChangesAsync();
+        //        TempData["Success"] = "Surfboard successfully booked";
+        //        IdentityKeys.CustomerID = customer.CustomerId;
+
+        //        return RedirectToAction("Create", "Rentals");
+        //    }
+        //    return View(customer);
+        //}
+
+
 
         // GET: Customers/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -150,14 +185,14 @@ namespace SurfBoardProject.Controllers
             {
                 _context.Customer.Remove(customer);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CustomerExists(int id)
         {
-          return (_context.Customer?.Any(e => e.CustomerId == id)).GetValueOrDefault();
+            return (_context.Customer?.Any(e => e.CustomerId == id)).GetValueOrDefault();
         }
     }
 }
