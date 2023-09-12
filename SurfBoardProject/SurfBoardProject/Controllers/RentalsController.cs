@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SurfBoardProject.Data;
 using SurfBoardProject.Models;
+using SurfBoardProject.Utility;
 
 namespace SurfBoardProject.Controllers
 {
@@ -45,6 +47,7 @@ namespace SurfBoardProject.Controllers
             return View(rental);
         }
 
+      
         // GET: Rentals/Create
         public IActionResult Create()
         {
@@ -56,10 +59,12 @@ namespace SurfBoardProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RentalId,Start,End,Price,TotalPrice")] Rental rental)
+        public async Task<IActionResult> Create([Bind("RentalId,Start,End,Price,TotalPrice, Boards")] Rental rental, int boardId)
         {
+            
             if (ModelState.IsValid)
             {
+                
                 _context.Add(rental);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

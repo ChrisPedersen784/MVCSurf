@@ -2,6 +2,6 @@
 {
     public class UserIdentity
     {
-        public static int UserID { get; set; }
+        public static string UserID { get; set; }
     }
 }
