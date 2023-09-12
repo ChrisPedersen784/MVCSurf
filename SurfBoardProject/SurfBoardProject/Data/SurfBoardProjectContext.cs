@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SurfBoardProject.Models;
 
 namespace SurfBoardProject.Data
 {
-    public class SurfBoardProjectContext : DbContext
+    public class SurfBoardProjectContext : IdentityDbContext
     {
         public SurfBoardProjectContext (DbContextOptions<SurfBoardProjectContext> options)
             : base(options)

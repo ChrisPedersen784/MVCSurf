@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SurfBoardProject.Data;
 using SurfBoardProject.Models;
 using SurfBoardProject.Utility;
 using System.Globalization;
+using Microsoft.AspNetCore.Identity;
 
 namespace SurfBoardProject
 {
@@ -19,6 +20,9 @@ namespace SurfBoardProject
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<SurfBoardProjectContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("SurfBoardProjectContext") ?? throw new InvalidOperationException("Connection string 'SurfBoardProjectContext' not found.")));
+
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<SurfBoardProjectContext>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -52,6 +56,7 @@ namespace SurfBoardProject
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseAuthentication(); ;
 
             app.UseAuthorization();
 
@@ -59,6 +64,7 @@ namespace SurfBoardProject
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
+            app.MapRazorPages();
             app.Run();
         }
 
