@@ -559,3 +559,11 @@ C:\Users\chris\OneDrive\Desktop\Git Repository\MVCSurf\SurfBoardProject\SurfBoar
 C:\Users\chris\OneDrive\Desktop\Git Repository\MVCSurf\SurfBoardProject\SurfBoardProject\bin\Debug\net6.0\runtimes\win-arm64\native\e_sqlite3.dll
 C:\Users\chris\OneDrive\Desktop\Git Repository\MVCSurf\SurfBoardProject\SurfBoardProject\bin\Debug\net6.0\runtimes\win-x64\native\e_sqlite3.dll
 C:\Users\chris\OneDrive\Desktop\Git Repository\MVCSurf\SurfBoardProject\SurfBoardProject\bin\Debug\net6.0\runtimes\win-x86\native\e_sqlite3.dll
+C:\Users\chris\OneDrive\Desktop\Git Repository\MVCSurf\SurfBoardProject\SurfBoardProject\obj\Debug\net6.0\SurfBoardProject.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\chris\OneDrive\Desktop\Git Repository\MVCSurf\SurfBoardProject\SurfBoardProject\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\chris\OneDrive\Desktop\Git Repository\MVCSurf\SurfBoardProject\SurfBoardProject\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\chris\OneDrive\Desktop\Git Repository\MVCSurf\SurfBoardProject\SurfBoardProject\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\chris\OneDrive\Desktop\Git Repository\MVCSurf\SurfBoardProject\SurfBoardProject\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.UI.dll
+C:\Users\chris\OneDrive\Desktop\Git Repository\MVCSurf\SurfBoardProject\SurfBoardProject\bin\Debug\net6.0\Microsoft.Extensions.FileProviders.Embedded.dll
+C:\Users\chris\OneDrive\Desktop\Git Repository\MVCSurf\SurfBoardProject\SurfBoardProject\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\chris\OneDrive\Desktop\Git Repository\MVCSurf\SurfBoardProject\SurfBoardProject\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
