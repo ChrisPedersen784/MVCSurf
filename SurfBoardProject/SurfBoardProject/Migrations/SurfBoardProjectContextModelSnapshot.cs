@@ -267,7 +267,7 @@ namespace SurfBoardProject.Migrations
 
                     b.HasIndex("RentalId");
 
-                    b.ToTable("BoardModel");
+                    b.ToTable("BoardModel", (string)null);
                 });
 
             modelBuilder.Entity("SurfBoardProject.Models.Customer", b =>
@@ -301,7 +301,7 @@ namespace SurfBoardProject.Migrations
 
                     b.HasIndex("RentalId");
 
-                    b.ToTable("Customer");
+                    b.ToTable("Customer", (string)null);
                 });
 
             modelBuilder.Entity("SurfBoardProject.Models.Rental", b =>
@@ -326,7 +326,7 @@ namespace SurfBoardProject.Migrations
 
                     b.HasKey("RentalId");
 
-                    b.ToTable("Rental");
+                    b.ToTable("Rental", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
