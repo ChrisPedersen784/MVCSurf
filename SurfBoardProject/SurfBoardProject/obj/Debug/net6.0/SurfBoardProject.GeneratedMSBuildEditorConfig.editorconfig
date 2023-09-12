@@ -16,16 +16,16 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\chris\OneDrive\Desktop\Git Repository\MVCSurf\SurfBoardProject\SurfBoardProject
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/chris/OneDrive/Desktop/Git Repository/MVCSurf/SurfBoardProject/SurfBoardProject/Views/BoardModels/Book.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9hcmRNb2RlbHNcQm9vay5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/chris/OneDrive/Desktop/Git Repository/MVCSurf/SurfBoardProject/SurfBoardProject/Views/BoardModels/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9hcmRNb2RlbHNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/chris/OneDrive/Desktop/Git Repository/MVCSurf/SurfBoardProject/SurfBoardProject/Views/BoardModels/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9hcmRNb2RlbHNcRGVsZXRlLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/chris/OneDrive/Desktop/Git Repository/MVCSurf/SurfBoardProject/SurfBoardProject/Views/BoardModels/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9hcmRNb2RlbHNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/chris/OneDrive/Desktop/Git Repository/MVCSurf/SurfBoardProject/SurfBoardProject/Views/BoardModels/Edit.cshtml]
@@ -36,12 +36,56 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9hcmRNb2RlbHNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/chris/OneDrive/Desktop/Git Repository/MVCSurf/SurfBoardProject/SurfBoardProject/Views/BoardModels/ShowBookingDetails.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9hcmRNb2RlbHNcU2hvd0Jvb2tpbmdEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/chris/OneDrive/Desktop/Git Repository/MVCSurf/SurfBoardProject/SurfBoardProject/Views/Customers/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VzdG9tZXJzXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/chris/OneDrive/Desktop/Git Repository/MVCSurf/SurfBoardProject/SurfBoardProject/Views/Customers/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VzdG9tZXJzXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/chris/OneDrive/Desktop/Git Repository/MVCSurf/SurfBoardProject/SurfBoardProject/Views/Customers/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VzdG9tZXJzXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/chris/OneDrive/Desktop/Git Repository/MVCSurf/SurfBoardProject/SurfBoardProject/Views/Customers/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VzdG9tZXJzXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/chris/OneDrive/Desktop/Git Repository/MVCSurf/SurfBoardProject/SurfBoardProject/Views/Customers/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VzdG9tZXJzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/chris/OneDrive/Desktop/Git Repository/MVCSurf/SurfBoardProject/SurfBoardProject/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/chris/OneDrive/Desktop/Git Repository/MVCSurf/SurfBoardProject/SurfBoardProject/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/chris/OneDrive/Desktop/Git Repository/MVCSurf/SurfBoardProject/SurfBoardProject/Views/Rentals/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVudGFsc1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/chris/OneDrive/Desktop/Git Repository/MVCSurf/SurfBoardProject/SurfBoardProject/Views/Rentals/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVudGFsc1xEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/chris/OneDrive/Desktop/Git Repository/MVCSurf/SurfBoardProject/SurfBoardProject/Views/Rentals/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVudGFsc1xEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/chris/OneDrive/Desktop/Git Repository/MVCSurf/SurfBoardProject/SurfBoardProject/Views/Rentals/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVudGFsc1xFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/chris/OneDrive/Desktop/Git Repository/MVCSurf/SurfBoardProject/SurfBoardProject/Views/Rentals/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVudGFsc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/chris/OneDrive/Desktop/Git Repository/MVCSurf/SurfBoardProject/SurfBoardProject/Views/Shared/Error.cshtml]
