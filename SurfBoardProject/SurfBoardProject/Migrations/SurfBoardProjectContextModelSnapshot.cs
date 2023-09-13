@@ -307,6 +307,9 @@ namespace SurfBoardProject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("IdentityUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -319,7 +322,12 @@ namespace SurfBoardProject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("CustomerId");
+
+                    b.HasIndex("IdentityUserId");
 
                     b.ToTable("Customer");
                 });
@@ -425,6 +433,15 @@ namespace SurfBoardProject.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SurfBoardProject.Models.Customer", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
+                        .WithMany()
+                        .HasForeignKey("IdentityUserId");
+
+                    b.Navigation("IdentityUser");
                 });
 #pragma warning restore 612, 618
         }

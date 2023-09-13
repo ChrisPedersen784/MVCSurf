@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SurfBoardProject.Models
@@ -15,5 +16,9 @@ namespace SurfBoardProject.Models
         public string PhoneNumber { get; set; }
 
         public ICollection<Rental>? Rentals { get; set; }
+        public int UserId { get; set; }
+        public IdentityUser? IdentityUser { get; set; }
+
+        
     }
 }

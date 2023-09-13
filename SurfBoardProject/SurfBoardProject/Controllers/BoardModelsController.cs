@@ -85,7 +85,7 @@ namespace SurfBoardProject.Controllers
         //GET: BoardModel/Book
         public async Task<IActionResult> Book(BoardModel board)
         {
-            IdentityKeys.BoardID = board.Id;
+          
             //If any of the IsAvailable properties are 1 then disable the board in the list
             IEnumerable<BoardModel> obj = _context.BoardModel.ToList();
                 return View(obj);
@@ -106,7 +106,7 @@ namespace SurfBoardProject.Controllers
                 try
                 {
                     boardModel.IsAvailable = 1;
-                    IdentityKeys.BoardID = id;
+                
                     _context.Update(boardModel);
                     await _context.SaveChangesAsync();
                 }

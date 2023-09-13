@@ -77,7 +77,7 @@ namespace SurfBoardProject.Controllers
 
                 await _context.SaveChangesAsync();
                 TempData["Success"] = "Surfboard successfully booked";
-                IdentityKeys.CustomerID = customer.CustomerId;
+            
 
                 return RedirectToAction("Create", "Rentals");
             }

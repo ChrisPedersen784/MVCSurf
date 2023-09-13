@@ -25,6 +25,12 @@ namespace SurfBoardProject.Controllers
         // GET: Rentals
         public async Task<IActionResult> Index()
         {
+
+            //var user =  _context.Rental
+            //    .Include(r => r.Boards)
+            //    .Include(r => r.Customers);
+            //return View(await user.ToListAsync());  
+
             return _context.Rental != null ?
                         View(await _context.Rental.ToListAsync()) :
                         Problem("Entity set 'SurfBoardProjectContext.Rental'  is null.");
@@ -84,7 +90,7 @@ namespace SurfBoardProject.Controllers
             {
                 _context.Add(rental);
                 await _context.SaveChangesAsync();
-                IdentityKeys.RentalID = rental.RentalId;
+               
                 return RedirectToAction("Book", "BoardModels");
             }
             return View(rental);
