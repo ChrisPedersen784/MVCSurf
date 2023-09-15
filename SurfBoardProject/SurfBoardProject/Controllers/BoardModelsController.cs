@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -81,6 +82,55 @@ namespace SurfBoardProject.Controllers
             return View(await PaginatedList<BoardModel>.
                 CreateAsync(boards.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
+
+
+        // GET: Customers
+        public async Task<IActionResult> ShowRentedBoard()
+        {
+            // Retrieve rentals for the user and include related BoardModel and Customer
+            // Retrieve rentals for the user where the associated board is available (IsAvailable == 1)
+            // Declare a variable to store the result of the query, which will be a list of rentals with available boards.
+            var boardRented = _context.Rental
+                // Filter the Rental entities.
+                .Where(r => r.Boards.Any(board => board.IsAvailable == 1))
+                // Eagerly load the Boards navigation property of Rental entities.
+                .Include(r => r.Boards)
+                // Eagerly load the Customers navigation property of Rental entities.
+                .Include(r => r.Customers)
+                // Execute the query and materialize the result into a list.
+                .ToList();
+
+
+            return View(boardRented);
+        }
+
+
+
+        public IActionResult ToggleAvailability(int itemId, int IsAvailable)
+        {
+            var item = _context.BoardModel.Find(itemId);
+
+            if(item != null)
+            {
+                item.IsAvailable = IsAvailable == 1 ? 0 : 1;
+
+                _context.SaveChanges();
+                
+                //Delete booking if Rental has 0 has Availability
+
+                //if(item.IsAvailable == 0)
+                //{
+                //    var deleteBook = _context.Rental
+                //        .Where(d => d.Boards.Any(board => board.IsAvailable == 0));
+                //    _context.Remove(deleteBook);
+                //}
+
+
+                return RedirectToAction("Index");
+            }
+            return NotFound();
+        }
+
        // [Authorize(Roles = "Customer")]
         //GET: BoardModel/Book
         public async Task<IActionResult> Book(BoardModel board)

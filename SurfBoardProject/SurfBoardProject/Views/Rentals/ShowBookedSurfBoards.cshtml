@@ -1,0 +1,33 @@
+﻿@model List<SurfBoardProject.Models.Rental>
+
+@{
+    ViewData["Title"] = "Rentals";
+}
+
+<h1>Rentals</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Price</th>
+            <th>Board Name</th>
+            <th>Customer Name</th>
+            <!-- Add other columns as needed -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var rental in Model)
+        {
+            <tr>
+                <td>@rental.Start.ToShortDateString()</td>
+                <td>@rental.End.ToShortDateString()</td>
+                <td>@rental.Price</td>
+                <td>@rental.Boards.FirstOrDefault()?.Name</td>
+                <td>@rental.Customers.FirstOrDefault()?.Name</td>
+                <!-- Add other cells for additional properties -->
+            </tr>
+        }
+    </tbody>
+</table>

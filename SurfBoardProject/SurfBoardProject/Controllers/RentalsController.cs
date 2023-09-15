@@ -40,6 +40,24 @@ namespace SurfBoardProject.Controllers
                         Problem("Entity set 'SurfBoardProjectContext.Rental'  is null.");
         }
 
+
+        // GET: Customers
+        public async Task<IActionResult> ShowBookedSurfBoards()
+        {
+            var userId = _userManager.GetUserId(User);
+
+            // Retrieve rentals for the user and include related BoardModel and Customer
+            var rentals = _context.Rental
+                .Where(r => r.Customers.Any(c => c.UserId == userId))
+                .Include(r => r.Boards)
+                .Include(r => r.Customers)
+                .ToList();
+
+            return View(rentals);
+        }
+
+
+
         // GET: Rentals/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -86,57 +104,42 @@ namespace SurfBoardProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(int id, RentalCustomer rentalCustomer)
         {
-            //        id = rentalCustomer.Customer.UserId;
             var userId = _userManager.GetUserId(User);
             rentalCustomer.Customer.UserId = userId;
             var board = _context.BoardModel.SingleOrDefault(m => m.Id == id);
+
             if (ModelState.IsValid)
             {
-
-                var newCustomer = new Customer
+                if (board.IsAvailable == 0)
                 {
-                    UserId = userId,
-                    Name = rentalCustomer.Customer.Name,
-                    LastName = rentalCustomer.Customer.LastName,
-                    Email = rentalCustomer.Customer.Email,
-                    PhoneNumber = rentalCustomer.Customer.PhoneNumber,
-                };
+                    board.IsAvailable = 1;
 
-                //Get info through Db
-                //var newboard = new BoardModel
-                //{
-                //    Id = board.Id,
-                //    Name = board.Name,
-                //    Length = board.Length,
-                //    Width = board.Width,
-                //    Volume = board.Volume,
-                //    ImgUrl = board.ImgUrl,
-                //    BoardDescription = board.BoardDescription,
-                //    Price = board.Price,
-                //    Equipment = board.Equipment
-                //};
-                var newRental = new Rental
+                    var newCustomer = new Customer
+                    {
+                        UserId = userId,
+                        Name = rentalCustomer.Customer.Name,
+                        LastName = rentalCustomer.Customer.LastName,
+                        Email = rentalCustomer.Customer.Email,
+                        PhoneNumber = rentalCustomer.Customer.PhoneNumber,
+                        Rentals = new List<Rental> // Add the rental to the new customer's Rentals collection
                 {
-                    Start = rentalCustomer.Rental.Start,
-                    End = rentalCustomer.Rental.End,
-                    Price = rentalCustomer.Rental.Price,
-                    Boards = new List<BoardModel> { board } // Add the selected board to the new rental's Boards collection
-                };
+                    new Rental
+                    {
+                        Start = rentalCustomer.Rental.Start,
+                        End = rentalCustomer.Rental.End,
+                        Price = rentalCustomer.Rental.Price,
+                        Boards = new List<BoardModel> { board } // Add the selected board to the new rental's Boards collection
+                    }
+                }
+                    };
 
+                    _context.Customer.Add(newCustomer);
+                    await _context.SaveChangesAsync();
 
-
-
-                newCustomer.Rentals = new List<Rental> { rentalCustomer.Rental };
-               // newboard.Rentals = new List<Rental> { rentalCustomer.Rental };
-
-                _context.Rental.Add(newRental);
-                _context.Customer.Add(rentalCustomer.Customer);
-                //_context.Customer.Add(newCustomer);
-               // _context.BoardModel.Add(newboard);
-                await _context.SaveChangesAsync();
-               
-                return RedirectToAction("Book", "BoardModels");
+                    return RedirectToAction("Book", "BoardModels");
+                }
             }
+
             return View(rentalCustomer);
         }
 
