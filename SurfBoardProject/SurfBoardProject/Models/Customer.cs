@@ -14,9 +14,9 @@ namespace SurfBoardProject.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-
+        public static int RetrievingUserID { get; set; }
         public ICollection<Rental>? Rentals { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public IdentityUser? IdentityUser { get; set; }
 
         

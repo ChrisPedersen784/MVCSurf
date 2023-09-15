@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,15 +12,18 @@ using SurfBoardProject.Data;
 using SurfBoardProject.Models;
 using SurfBoardProject.Utility;
 
+
 namespace SurfBoardProject.Controllers
 {
     public class RentalsController : Controller
     {
         private readonly SurfBoardProjectContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public RentalsController(SurfBoardProjectContext context)
+        public RentalsController(SurfBoardProjectContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Rentals
@@ -56,8 +60,20 @@ namespace SurfBoardProject.Controllers
 
 
         // GET: Rentals/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            //if (id == null || !User.Identity.IsAuthenticated)
+            //{
+            //    return NotFound();
+            //}
+
+            //var board = await _context.Customer.FirstOrDefaultAsync(m => m.UserId == Ident);
+            //if (board == null)
+            //{
+            //    return NotFound();
+            //}
+
+
 
 
             return View();
@@ -68,32 +84,60 @@ namespace SurfBoardProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RentalId,Start,End,Price")] Rental rental)
+        public async Task<IActionResult> Create(int id, RentalCustomer rentalCustomer)
         {
-
-
-            //if (IdentityKeys.CustomerID != null && IdentityKeys.BoardID != null)
-            //{
-            //    // Fetch the BoardModel and Customer entities based on their IDs
-            //    var selectedBoard = _context.BoardModel.Find(IdentityKeys.BoardID);
-            //    var selectedCustomer = _context.Customer.Find(IdentityKeys.CustomerID);
-
-            //    if (selectedBoard != null && selectedCustomer != null)
-            //    {
-            //        // Add the selected BoardModel and Customer to the Rental's collections
-            //        rental.Boards.Add(selectedBoard);
-            //        rental.Customers.Add(selectedCustomer);
-            //    }
-            //}
-
+            //        id = rentalCustomer.Customer.UserId;
+            var userId = _userManager.GetUserId(User);
+            rentalCustomer.Customer.UserId = userId;
+            var board = _context.BoardModel.SingleOrDefault(m => m.Id == id);
             if (ModelState.IsValid)
             {
-                _context.Add(rental);
+
+                var newCustomer = new Customer
+                {
+                    UserId = userId,
+                    Name = rentalCustomer.Customer.Name,
+                    LastName = rentalCustomer.Customer.LastName,
+                    Email = rentalCustomer.Customer.Email,
+                    PhoneNumber = rentalCustomer.Customer.PhoneNumber,
+                };
+
+                //Get info through Db
+                //var newboard = new BoardModel
+                //{
+                //    Id = board.Id,
+                //    Name = board.Name,
+                //    Length = board.Length,
+                //    Width = board.Width,
+                //    Volume = board.Volume,
+                //    ImgUrl = board.ImgUrl,
+                //    BoardDescription = board.BoardDescription,
+                //    Price = board.Price,
+                //    Equipment = board.Equipment
+                //};
+                var newRental = new Rental
+                {
+                    Start = rentalCustomer.Rental.Start,
+                    End = rentalCustomer.Rental.End,
+                    Price = rentalCustomer.Rental.Price,
+                    Boards = new List<BoardModel> { board } // Add the selected board to the new rental's Boards collection
+                };
+
+
+
+
+                newCustomer.Rentals = new List<Rental> { rentalCustomer.Rental };
+               // newboard.Rentals = new List<Rental> { rentalCustomer.Rental };
+
+                _context.Rental.Add(newRental);
+                _context.Customer.Add(rentalCustomer.Customer);
+                //_context.Customer.Add(newCustomer);
+               // _context.BoardModel.Add(newboard);
                 await _context.SaveChangesAsync();
                
                 return RedirectToAction("Book", "BoardModels");
             }
-            return View(rental);
+            return View(rentalCustomer);
         }
 
         // GET: Rentals/Edit/5
