@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SurfBoardProject.Data;
 using SurfBoardProject.Models;
 using SurfBoardProject.Utility;
 using System.Globalization;
+using Microsoft.AspNetCore.Identity;
 
 namespace SurfBoardProject
 {
@@ -13,12 +14,15 @@ namespace SurfBoardProject
         public static void Main(string[] args)
         {
 
-
-
-
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<SurfBoardProjectContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("SurfBoardProjectContext") ?? throw new InvalidOperationException("Connection string 'SurfBoardProjectContext' not found.")));
+
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                  .AddRoles<IdentityRole>() // Add support for roles
+    .AddEntityFrameworkStores<SurfBoardProjectContext>();
+
+           
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -52,12 +56,40 @@ namespace SurfBoardProject
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseAuthentication(); ;
 
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.MapRazorPages();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                // create roles
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                var roles = new[] { "Admin", "Customer" };
+                foreach (var role in roles)
+                {
+
+                    // check if role exists and if they dont create them
+                    if (!roleManager.RoleExistsAsync("Customer").Result)
+                    {
+                        roleManager.CreateAsync(new IdentityRole("Customer")).Wait();
+                    }
+
+                    if (!roleManager.RoleExistsAsync("Admin").Result)
+                    {
+                        roleManager.CreateAsync(new IdentityRole("Admin")).Wait();
+                    }
+                }
+
+                // SeedData.Initialize(services); 
+            }
 
             app.Run();
         }

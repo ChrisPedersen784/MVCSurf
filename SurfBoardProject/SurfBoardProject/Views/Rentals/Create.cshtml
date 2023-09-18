@@ -1,0 +1,71 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@model SurfBoardProject.Models.RentalCustomer
+@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Rental</h4>
+            <hr />
+            <form asp-controller="Rentals" asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Customer.UserId" value="@UserManager.GetUserId(User)"/>
+                <div class="form-group">
+                    <label asp-for="Rental.Start" class="control-label"></label>
+                    <input asp-for="Rental.Start" class="form-control" />
+                    <span asp-validation-for="Rental.Start" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Rental.End" class="control-label"></label>
+                    <input asp-for="Rental.End" class="form-control" />
+                    <span asp-validation-for="Rental.End" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Rental.Price" class="control-label"></label>
+                    <input asp-for="Rental.Price" class="form-control" />
+                    <span asp-validation-for="Rental.Price" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Customer.Name" class="control-label"></label>
+                    <input asp-for="Customer.Name" class="form-control" />
+                    <span asp-validation-for="Customer.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Customer.LastName" class="control-label"></label>
+                    <input asp-for="Customer.LastName" class="form-control" />
+                    <span asp-validation-for="Customer.LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Customer.Email" class="control-label"></label>
+                    <input asp-for="Customer.Email" class="form-control" />
+                    <span asp-validation-for="Customer.Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Customer.PhoneNumber" class="control-label"></label>
+                    <input asp-for="Customer.PhoneNumber" class="form-control" />
+                    <span asp-validation-for="Customer.PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Commit Booking" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
