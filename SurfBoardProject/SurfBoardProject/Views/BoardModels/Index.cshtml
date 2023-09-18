@@ -108,6 +108,16 @@
                     <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
+                    <form asp-controller="BoardModels" asp-action="ToggleAvailability" method="post" style="display: inline;">
+                        <input type="hidden" name="itemId" value="@item.Id" />
+                        <input type="hidden" name="isAvailable" value="@item.IsAvailable" />
+
+                        <button type="submit" class="btn @(item.IsAvailable == 0 ? "btn-outline-primary" : "btn-success")">
+                            @(item.IsAvailable == 0 ? "Available" : "Booked")
+                        </button>
+
+                    </form>
                 </td>
             </tr>
         }

@@ -1,7 +1,6 @@
-﻿namespace SurfBoardProject.Models
+﻿using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
+
+namespace SurfBoardProject.Models
 {
-    public class UserIdentity
-    {
-        public static string UserID { get; set; }
-    }
+    
 }

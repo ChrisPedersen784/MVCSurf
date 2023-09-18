@@ -3,31 +3,60 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
 using SurfBoardProject.Data;
 using SurfBoardProject.Models;
 using SurfBoardProject.Utility;
+
 
 namespace SurfBoardProject.Controllers
 {
     public class RentalsController : Controller
     {
         private readonly SurfBoardProjectContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public RentalsController(SurfBoardProjectContext context)
+        public RentalsController(SurfBoardProjectContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Rentals
         public async Task<IActionResult> Index()
         {
-              return _context.Rental != null ? 
-                          View(await _context.Rental.ToListAsync()) :
-                          Problem("Entity set 'SurfBoardProjectContext.Rental'  is null.");
+
+            //var user =  _context.Rental
+            //    .Include(r => r.Boards)
+            //    .Include(r => r.Customers);
+            //return View(await user.ToListAsync());  
+
+            return _context.Rental != null ?
+                        View(await _context.Rental.ToListAsync()) :
+                        Problem("Entity set 'SurfBoardProjectContext.Rental'  is null.");
         }
+
+
+        // GET: Customers
+        public async Task<IActionResult> ShowBookedSurfBoards()
+        {
+            var userId = _userManager.GetUserId(User);
+
+            // Retrieve rentals for the user and include related BoardModel and Customer
+            var rentals = _context.Rental
+                .Where(r => r.Customers.Any(c => c.UserId == userId))
+                .Include(r => r.Boards)
+                .Include(r => r.Customers)
+                .ToList();
+
+            return View(rentals);
+        }
+
+
 
         // GET: Rentals/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -47,10 +76,24 @@ namespace SurfBoardProject.Controllers
             return View(rental);
         }
 
-      
+
         // GET: Rentals/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            //if (id == null || !User.Identity.IsAuthenticated)
+            //{
+            //    return NotFound();
+            //}
+
+            //var board = await _context.Customer.FirstOrDefaultAsync(m => m.UserId == Ident);
+            //if (board == null)
+            //{
+            //    return NotFound();
+            //}
+
+
+
+
             return View();
         }
 
@@ -59,17 +102,45 @@ namespace SurfBoardProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RentalId,Start,End,Price,TotalPrice, Boards")] Rental rental, int boardId)
+        public async Task<IActionResult> Create(int id, RentalCustomer rentalCustomer)
         {
-            
+            var userId = _userManager.GetUserId(User);
+            rentalCustomer.Customer.UserId = userId;
+            var board = _context.BoardModel.SingleOrDefault(m => m.Id == id);
+
             if (ModelState.IsValid)
             {
-                
-                _context.Add(rental);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (board.IsAvailable == 0)
+                {
+                    board.IsAvailable = 1;
+
+                    var newCustomer = new Customer
+                    {
+                        UserId = userId,
+                        Name = rentalCustomer.Customer.Name,
+                        LastName = rentalCustomer.Customer.LastName,
+                        Email = rentalCustomer.Customer.Email,
+                        PhoneNumber = rentalCustomer.Customer.PhoneNumber,
+                        Rentals = new List<Rental> // Add the rental to the new customer's Rentals collection
+                {
+                    new Rental
+                    {
+                        Start = rentalCustomer.Rental.Start,
+                        End = rentalCustomer.Rental.End,
+                        Price = rentalCustomer.Rental.Price,
+                        Boards = new List<BoardModel> { board } // Add the selected board to the new rental's Boards collection
+                    }
+                }
+                    };
+
+                    _context.Customer.Add(newCustomer);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Book", "BoardModels");
+                }
             }
-            return View(rental);
+
+            return View(rentalCustomer);
         }
 
         // GET: Rentals/Edit/5
@@ -155,14 +226,14 @@ namespace SurfBoardProject.Controllers
             {
                 _context.Rental.Remove(rental);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool RentalExists(int id)
         {
-          return (_context.Rental?.Any(e => e.RentalId == id)).GetValueOrDefault();
+            return (_context.Rental?.Any(e => e.RentalId == id)).GetValueOrDefault();
         }
     }
 }

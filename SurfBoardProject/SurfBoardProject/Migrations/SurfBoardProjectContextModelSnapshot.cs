@@ -22,6 +22,36 @@ namespace SurfBoardProject.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BoardModelRental", b =>
+                {
+                    b.Property<int>("BoardsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RentalsRentalId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BoardsId", "RentalsRentalId");
+
+                    b.HasIndex("RentalsRentalId");
+
+                    b.ToTable("BoardModelRental");
+                });
+
+            modelBuilder.Entity("CustomerRental", b =>
+                {
+                    b.Property<int>("CustomersCustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RentalsRentalId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CustomersCustomerId", "RentalsRentalId");
+
+                    b.HasIndex("RentalsRentalId");
+
+                    b.ToTable("CustomerRental");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -254,9 +284,6 @@ namespace SurfBoardProject.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<int?>("RentalId")
-                        .HasColumnType("int");
-
                     b.Property<double>("Volume")
                         .HasColumnType("float");
 
@@ -264,8 +291,6 @@ namespace SurfBoardProject.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RentalId");
 
                     b.ToTable("BoardModel");
                 });
@@ -282,6 +307,9 @@ namespace SurfBoardProject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("IdentityUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -294,12 +322,13 @@ namespace SurfBoardProject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RentalId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CustomerId");
 
-                    b.HasIndex("RentalId");
+                    b.HasIndex("IdentityUserId");
 
                     b.ToTable("Customer");
                 });
@@ -321,12 +350,39 @@ namespace SurfBoardProject.Migrations
                     b.Property<DateTime>("Start")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
-
                     b.HasKey("RentalId");
 
                     b.ToTable("Rental");
+                });
+
+            modelBuilder.Entity("BoardModelRental", b =>
+                {
+                    b.HasOne("SurfBoardProject.Models.BoardModel", null)
+                        .WithMany()
+                        .HasForeignKey("BoardsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SurfBoardProject.Models.Rental", null)
+                        .WithMany()
+                        .HasForeignKey("RentalsRentalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CustomerRental", b =>
+                {
+                    b.HasOne("SurfBoardProject.Models.Customer", null)
+                        .WithMany()
+                        .HasForeignKey("CustomersCustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SurfBoardProject.Models.Rental", null)
+                        .WithMany()
+                        .HasForeignKey("RentalsRentalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -380,25 +436,13 @@ namespace SurfBoardProject.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SurfBoardProject.Models.BoardModel", b =>
-                {
-                    b.HasOne("SurfBoardProject.Models.Rental", null)
-                        .WithMany("Boards")
-                        .HasForeignKey("RentalId");
-                });
-
             modelBuilder.Entity("SurfBoardProject.Models.Customer", b =>
                 {
-                    b.HasOne("SurfBoardProject.Models.Rental", "Rental")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
                         .WithMany()
-                        .HasForeignKey("RentalId");
+                        .HasForeignKey("IdentityUserId");
 
-                    b.Navigation("Rental");
-                });
-
-            modelBuilder.Entity("SurfBoardProject.Models.Rental", b =>
-                {
-                    b.Navigation("Boards");
+                    b.Navigation("IdentityUser");
                 });
 #pragma warning restore 612, 618
         }

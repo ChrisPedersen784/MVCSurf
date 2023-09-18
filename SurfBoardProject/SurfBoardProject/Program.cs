@@ -14,9 +14,6 @@ namespace SurfBoardProject
         public static void Main(string[] args)
         {
 
-
-
-
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<SurfBoardProjectContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("SurfBoardProjectContext") ?? throw new InvalidOperationException("Connection string 'SurfBoardProjectContext' not found.")));
@@ -24,6 +21,8 @@ namespace SurfBoardProject
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                   .AddRoles<IdentityRole>() // Add support for roles
     .AddEntityFrameworkStores<SurfBoardProjectContext>();
+
+           
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
