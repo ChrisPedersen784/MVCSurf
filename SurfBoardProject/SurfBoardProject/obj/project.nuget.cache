@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "KQULYTnjlC8m94DLrWGxC/ZNc2BxD4mpd1CepOgskXHhiHJKwGQm95AqhJir+zJfJiP5bi08Va342QGbyuY3Qg==",
+  "dgSpecHash": "L9Qog6TXol+0Jc72yAtCay3rl3LZ7r51889ouykMRP0LuVzITAYTBlTuUcBiFszmw6rXt8igS4kl3UwOzdrevg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\chris\\OneDrive\\Desktop\\ASP.Net\\SurfBoardProject\\SurfBoardProject\\SurfBoardProject.csproj",
+  "projectFilePath": "C:\\Users\\chris\\OneDrive\\Desktop\\Git Repository\\MVCSurf\\SurfBoardProject\\SurfBoardProject\\SurfBoardProject.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\chris\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\chris\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
