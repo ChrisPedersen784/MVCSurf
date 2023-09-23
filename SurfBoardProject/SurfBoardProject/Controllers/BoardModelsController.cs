@@ -28,7 +28,7 @@ namespace SurfBoardProject.Controllers
         // GET: BoardModels
         //Responds to a HTTP Get Request
         // This action method handles requests to the Index view with sorting, filtering, and pagination parameters
-       // [Authorize(Roles = "Admin")]
+      
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
             // Setting up sorting parameters for the view
@@ -85,6 +85,7 @@ namespace SurfBoardProject.Controllers
 
 
         // GET: Customers
+     
         public async Task<IActionResult> ShowRentedBoard()
         {
             // Retrieve rentals for the user and include related BoardModel and Customer
@@ -105,17 +106,17 @@ namespace SurfBoardProject.Controllers
         }
 
 
-
+      
         public IActionResult ToggleAvailability(int itemId, int IsAvailable)
         {
             var item = _context.BoardModel.Find(itemId);
 
-            if(item != null)
+            if (item != null)
             {
                 item.IsAvailable = IsAvailable == 1 ? 0 : 1;
 
                 _context.SaveChanges();
-                
+
                 //Delete booking if Rental has 0 has Availability
 
                 //if(item.IsAvailable == 0)
@@ -131,14 +132,15 @@ namespace SurfBoardProject.Controllers
             return NotFound();
         }
 
-       // [Authorize(Roles = "Customer")]
+        // [Authorize(Roles = "Customer")]
         //GET: BoardModel/Book
+
         public async Task<IActionResult> Book(BoardModel board)
         {
-          
+
             //If any of the IsAvailable properties are 1 then disable the board in the list
             IEnumerable<BoardModel> obj = _context.BoardModel.ToList();
-                return View(obj);
+            return View(obj);
         }
 
         //POST
@@ -156,7 +158,7 @@ namespace SurfBoardProject.Controllers
                 try
                 {
                     boardModel.IsAvailable = 1;
-                
+
                     _context.Update(boardModel);
                     await _context.SaveChangesAsync();
                 }
@@ -227,7 +229,6 @@ namespace SurfBoardProject.Controllers
 
             return View(boardModel);
         }
-
         // GET: BoardModels/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

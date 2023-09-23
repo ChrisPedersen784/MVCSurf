@@ -17,6 +17,7 @@
             <form asp-controller="Rentals" asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Customer.UserId" value="@UserManager.GetUserId(User)"/>
+                
                 <div class="form-group">
                     <label asp-for="Rental.Start" class="control-label"></label>
                     <input asp-for="Rental.Start" class="form-control" />

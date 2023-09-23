@@ -13,5 +13,8 @@ namespace SurfBoardProject.Models
         public ICollection<BoardModel>? Boards { get; set; }
         public ICollection<Customer>? Customers { get; set; }
 
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
+
     }
 }

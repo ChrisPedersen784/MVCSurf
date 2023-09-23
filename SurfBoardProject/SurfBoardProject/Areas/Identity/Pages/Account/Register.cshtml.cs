@@ -120,7 +120,7 @@ namespace SurfBoardProject.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, "Customer"); // Assign user to role
+                    await _userManager.AddToRoleAsync(user, "Admin"); // Assign user to role
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
