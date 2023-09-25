@@ -20,7 +20,8 @@ namespace SurfBoardProject.Models
         public double Price { get; set; }
         public string? Equipment { get; set; }
         public int IsAvailable { get; set; } = 0;
-
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
         public ICollection<Rental>? Rentals { get; set; }
 
     }

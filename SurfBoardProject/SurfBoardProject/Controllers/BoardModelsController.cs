@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Storage;
 using SurfBoardProject.Data;
 using SurfBoardProject.Models;
 using SurfBoardProject.Models.Enum;
@@ -28,7 +30,7 @@ namespace SurfBoardProject.Controllers
         // GET: BoardModels
         //Responds to a HTTP Get Request
         // This action method handles requests to the Index view with sorting, filtering, and pagination parameters
-      
+
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
             // Setting up sorting parameters for the view
@@ -85,7 +87,7 @@ namespace SurfBoardProject.Controllers
 
 
         // GET: Customers
-     
+
         public async Task<IActionResult> ShowRentedBoard()
         {
             // Retrieve rentals for the user and include related BoardModel and Customer
@@ -106,7 +108,7 @@ namespace SurfBoardProject.Controllers
         }
 
 
-      
+
         public IActionResult ToggleAvailability(int itemId, int IsAvailable)
         {
             var item = _context.BoardModel.Find(itemId);
@@ -247,38 +249,105 @@ namespace SurfBoardProject.Controllers
 
         // POST: BoardModels/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Length,Width,Volume,BoardDescription,Price,Equipment")] BoardModel boardModel)
+        public async Task<IActionResult> Edit(int? id, byte[] rowVersion)
         {
-            if (id != boardModel.Id)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            var boardToUpdate = await _context.BoardModel.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (boardToUpdate == null)
+            {
+                BoardModel deletedBoard = new BoardModel();
+                await TryUpdateModelAsync(deletedBoard);
+                ModelState.AddModelError(string.Empty, "Unable to save changes. The record was deleted by another user.");
+                return RedirectToAction(nameof(Index));
+            }
+            if (await TryUpdateModelAsync<BoardModel>(boardToUpdate, "",
+                s => s.Name,
+                s => s.Length,
+                s => s.Width,
+                s => s.Volume,
+                s => s.BoardType,
+                s => s.Price,
+                s => s.Equipment,
+                s => s.RowVersion))
             {
                 try
                 {
-                    _context.Update(boardModel);
+                    _context.Entry(boardToUpdate).OriginalValues["RowVersion"] = rowVersion;
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!BoardModelExists(boardModel.Id))
+                    var exceptionEntry = ex.Entries.Single();
+                    var clientValues = (BoardModel)exceptionEntry.Entity;
+                    var databaseEntry = exceptionEntry.GetDatabaseValues();
+                    if (databaseEntry == null)
                     {
-                        return NotFound();
+                        ModelState.AddModelError(string.Empty,
+                            "Unable to save changes. The department was deleted by another user.");
                     }
                     else
                     {
-                        throw;
+                        var databaseValues = (BoardModel)databaseEntry.ToObject();
+
+                        if (databaseValues.Name != clientValues.Name)
+                        {
+                            ModelState.AddModelError("Name", $"Current value: {databaseValues.Name}");
+                        }
+                        if (databaseValues.Length != clientValues.Length)
+                        {
+                            ModelState.AddModelError("Lenght", $"Current value: {databaseValues.Length}");
+                        }
+                        if (databaseValues.Width != clientValues.Width)
+                        {
+                            ModelState.AddModelError("Width", $"Current value: {databaseValues.Width}");
+                        }
+                        if (databaseValues.Volume != clientValues.Volume)
+                        {
+                            ModelState.AddModelError("Volume", $"Current value: {databaseValues.Volume}");
+                        }
+                        if (databaseValues.BoardType != clientValues.BoardType)
+                        {
+                            ModelState.AddModelError("BoardType", $"Current value: {databaseValues.BoardType}");
+                        }
+                        if (databaseValues.Price != clientValues.Price)
+                        {
+                            ModelState.AddModelError("Price", $"Current value: {databaseValues.Price}");
+                        }
+                        if (databaseValues.Equipment != clientValues.Equipment)
+                        {
+                            ModelState.AddModelError("Equipment", $"Current value: {databaseValues.Equipment}");
+                        }
+                        if (databaseValues.RowVersion != clientValues.RowVersion)
+                        {
+                            ModelState.AddModelError("RowVersion", $"Current value: {databaseValues.RowVersion}");
+                        }
+
+                        ModelState.AddModelError(string.Empty, "The record you attempted to edit "
+                              + "was modified by another user after you got the original value. The "
+                              + "edit operation was canceled and the current values in the database "
+                              + "have been displayed. If you still want to edit this record, click "
+                              + "the Save button again. Otherwise click the Back to List hyperlink.");
+                        boardToUpdate.RowVersion = (byte[])databaseValues.RowVersion;
+                        ModelState.Remove("RowVersion");
+
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
-            return View(boardModel);
+            return View(boardToUpdate);
         }
+
+
+
+
 
         // GET: BoardModels/Delete/5
         public async Task<IActionResult> Delete(int? id)
