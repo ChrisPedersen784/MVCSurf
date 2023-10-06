@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using NuGet.Packaging;
 using SurfBoardProject.Data;
 using SurfBoardProject.Models;
@@ -19,11 +20,13 @@ namespace SurfBoardProject.Controllers
     {
         private readonly SurfBoardProjectContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public RentalsController(SurfBoardProjectContext context, UserManager<IdentityUser> userManager)
+        public RentalsController(SurfBoardProjectContext context, UserManager<IdentityUser> userManager, IHttpClientFactory httpClientFactory)
         {
             _context = context;
             _userManager = userManager;
+            _httpClientFactory = httpClientFactory;
         }
 
         // GET: Rentals
@@ -46,15 +49,30 @@ namespace SurfBoardProject.Controllers
         {
             var userId = _userManager.GetUserId(User);
 
-            // Retrieve rentals for the user and include related BoardModel and Customer
-            var rentals = _context.Rental
-                .Where(r => r.Customers.Any(c => c.UserId == userId))
-                .Include(r => r.Boards)
-                .Include(r => r.Customers)
-                .ToList();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://localhost:7161/");
 
-            return View(rentals);
+                string baseUrl = $"https://localhost:7161/api/RentAPI/GetRental?userId={userId}";
+                // Append the userId as a query parameter
+                //HttpResponseMessage response = await client.GetAsync($"api/RentAPI/GetRental?userId={userId}");
+                HttpResponseMessage response = await client.GetAsync(baseUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonContent = await response.Content.ReadAsStringAsync();
+                    var rentals = JsonConvert.DeserializeObject<List<Rental>>(jsonContent);
+
+                    return View(rentals);
+                }
+                else
+                {
+                    // Handle the error appropriately
+                    return View("Error");
+                }
+            }
         }
+
 
 
 

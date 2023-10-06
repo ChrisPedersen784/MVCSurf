@@ -28,6 +28,7 @@ namespace SurfBoardProject
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddScoped<BoardService>();
+            builder.Services.AddHttpClient();
 
             var app = builder.Build();
 
