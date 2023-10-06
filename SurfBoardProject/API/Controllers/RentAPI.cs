@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using SurfBoardProject.Data;
 using SurfBoardProject.Models;
@@ -32,7 +33,16 @@ namespace API.Controllers
             try
             {
                 var rentals = await _context.Rental.ToListAsync();
-                return Ok(rentals);
+                var options = new JsonSerializerOptions
+                {
+                    ReferenceHandler = ReferenceHandler.Preserve,
+                };
+
+                var jsonSerialized = System.Text.Json.JsonSerializer.Serialize(rentals, options);
+
+
+                return Ok(jsonSerialized);
+
             }
             catch (Exception ex)
             {
@@ -47,10 +57,11 @@ namespace API.Controllers
             {
                 // Use the userId parameter to filter rentals
                 var rentals = await _context.Rental
-                    .Where(r => r.Customers.Any(c => c.UserId == userId))
-                    .Include(r => r.Boards)
-                    .Include(r => r.Customers)
-                    .ToListAsync();
+                .Where(r => r.Customers.Any(c => c.UserId == userId) && r.Boards.Any(ren => ren.IsAvailable != 0))
+                .Include(r => r.Boards)
+                .Include(r => r.Customers)
+                .ToListAsync();
+
                 var options = new JsonSerializerOptions
                 {
                     ReferenceHandler = ReferenceHandler.Preserve,
@@ -70,10 +81,9 @@ namespace API.Controllers
 
 
 
-        [HttpPost]
-        public async Task<IActionResult> CreateRental(int id, [FromBody] RentalCustomer rentalCustomer)
+        [HttpPost("{id}/rent")]
+        public async Task<IActionResult> CreateRental(int id, [FromBody] RentalCustomer rentalCustomer, [FromQuery] string userId)
         {
-            var userId = _userManager.GetUserId(User);
             rentalCustomer.Customer.UserId = userId;
 
             var boardToUpdate = await _context.BoardModel.FirstOrDefaultAsync(m => m.Id == id);
@@ -85,17 +95,17 @@ namespace API.Controllers
                     ModelState.Remove("Rental.RowVersion");
                     if (ModelState.IsValid)
                     {
-                        // Proceed with booking
-                        boardToUpdate.IsAvailable = 1;
+                            // Proceed with booking
+                            boardToUpdate.IsAvailable = 1;
 
-                        var newCustomer = new Customer
-                        {
-                            UserId = userId,
-                            Name = rentalCustomer.Customer.Name,
-                            LastName = rentalCustomer.Customer.LastName,
-                            Email = rentalCustomer.Customer.Email,
-                            PhoneNumber = rentalCustomer.Customer.PhoneNumber,
-                            Rentals = new List<Rental>
+                            var newCustomer = new Customer
+                            {
+                                UserId = userId,
+                                Name = rentalCustomer.Customer.Name,
+                                LastName = rentalCustomer.Customer.LastName,
+                                Email = rentalCustomer.Customer.Email,
+                                PhoneNumber = rentalCustomer.Customer.PhoneNumber,
+                                Rentals = new List<Rental>
                             {
                                 new Rental
                                 {
@@ -106,14 +116,16 @@ namespace API.Controllers
                                     Boards = new List<BoardModel> { boardToUpdate }
                                 }
                             }
-                        };
+                            };
 
-                        _context.Customer.Add(newCustomer);
+                            _context.Customer.Add(newCustomer);
 
-                        // SaveChangesAsync will handle concurrency conflicts
-                        await _context.SaveChangesAsync();
+                            // SaveChangesAsync will handle concurrency conflicts
+                            await _context.SaveChangesAsync();
 
-                        return CreatedAtAction(nameof(GetRental), new { id = newCustomer.Rentals.First().RentalId }, newCustomer.Rentals.First());
+                            return CreatedAtAction("GetRental", new { id = newCustomer.Rentals.First().RentalId }, rentalCustomer);
+
+                        }
                     }
                 }
                 else
