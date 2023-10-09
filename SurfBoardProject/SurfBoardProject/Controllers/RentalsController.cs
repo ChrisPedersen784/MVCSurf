@@ -22,6 +22,7 @@ namespace SurfBoardProject.Controllers
         private readonly SurfBoardProjectContext _context;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IHttpClientFactory _httpClientFactory;
+        private string _unAuthorizedUser = "44516742-ebe2-4454-9c14-b80d325c961e";
 
         public RentalsController(SurfBoardProjectContext context, UserManager<IdentityUser> userManager, IHttpClientFactory httpClientFactory)
         {
@@ -49,6 +50,17 @@ namespace SurfBoardProject.Controllers
         public async Task<IActionResult> ShowBookedSurfBoards()
         {
             var userId = _userManager.GetUserId(User);
+
+            string userAccessPackage = "1.0";
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                userAccessPackage = "2.0";
+            }
+            else
+            {
+                userId = _unAuthorizedUser;
+            }
 
             using (var client = new HttpClient())
             {
@@ -99,19 +111,6 @@ namespace SurfBoardProject.Controllers
         // GET: Rentals/Create
         public async Task<IActionResult> Create()
         {
-            //if (id == null || !User.Identity.IsAuthenticated)
-            //{
-            //    return NotFound();
-            //}
-
-            //var board = await _context.Customer.FirstOrDefaultAsync(m => m.UserId == Ident);
-            //if (board == null)
-            //{
-            //    return NotFound();
-            //}
-
-
-
 
             return View();
         }
@@ -123,9 +122,21 @@ namespace SurfBoardProject.Controllers
         {
             var userId = _userManager.GetUserId(User);
 
+            string userAccessPackage = "1.0";
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                userAccessPackage = "2.0";
+            }
+            else
+            {
+                userId = _unAuthorizedUser;
+                rentalCustomer.Customer.UserId = userId;
+            }
+
             using (var client = new HttpClient())
             {
-                string baseUrl = $"https://localhost:7161/api/RentAPI/{id}/rent?userId={userId}";
+                string baseUrl = $"https://localhost:7161/api/rent/{id}/rent?userId={userId}&api-version={userAccessPackage}";
 
                 // Serialize the rentalCustomer object to JSON
                 var jsonContent = JsonConvert.SerializeObject(rentalCustomer);
@@ -136,29 +147,73 @@ namespace SurfBoardProject.Controllers
                 // Send the POST request with the content
                 var response = await client.PostAsync(baseUrl, content);
 
-                /*var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");:
-                 * jsonContent is the JSON data that you want to send to the server. It represents the data you want to include in the request body. In your case, it's the serialized RentalCustomer object.
-                 * Encoding.UTF8 specifies the character encoding to use when converting the JSON data to bytes. UTF-8 is a common encoding for JSON data.
-                 * "application/json" is the media type (or content type) of the request body. It tells the server that the request body contains JSON data. This is important because the server needs to know how to interpret the data you're sending.
-                 * So, you're creating a StringContent object with your JSON data and specifying that it's in JSON format.
-                 * var response = await client.PostAsync(baseUrl, content);:
-                 * client.PostAsync(baseUrl, content) sends an HTTP POST request to the specified baseUrl with the JSON data included in the content variable as the request body.*/
-
                 if (response.IsSuccessStatusCode)
                 {
                     // Log or debug the response status code and content
                     var statusCode = response.StatusCode;
+                    TempData["Success"] = "Surfboard successfully booked";
                     // Redirect to the "Book" action
                     return RedirectToAction("Book", "BoardModels");
                 }
-
                 else
                 {
+                    // Handle the error response
+                    var errorContent = await response.Content.ReadAsStringAsync();
+
+
+                    // Parse the errorContent as JSON if it's in JSON format
+                   
+                    ModelState.AddModelError(string.Empty, errorContent);
                     // Handle the error appropriately
-                    return View("Error");
+                    TempData["Error"] = errorContent.ToString();
+                    return RedirectToAction("Book", "BoardModels");
                 }
             }
+
         }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create(int id, RentalCustomer rentalCustomer)
+        //{
+        //    var userId = _userManager.GetUserId(User);
+
+        //    using (var client = new HttpClient())
+        //    {
+        //        string baseUrl = $"https://localhost:7161/api/RentAPI/{id}/rent?userId={userId}";
+
+        //        // Serialize the rentalCustomer object to JSON
+        //        var jsonContent = JsonConvert.SerializeObject(rentalCustomer);
+
+        //        // Create a StringContent with JSON data and set the Content-Type header
+        //        var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+        //        // Send the POST request with the content
+        //        var response = await client.PostAsync(baseUrl, content);
+
+        //        /*var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");:
+        //         * jsonContent is the JSON data that you want to send to the server. It represents the data you want to include in the request body. In your case, it's the serialized RentalCustomer object.
+        //         * Encoding.UTF8 specifies the character encoding to use when converting the JSON data to bytes. UTF-8 is a common encoding for JSON data.
+        //         * "application/json" is the media type (or content type) of the request body. It tells the server that the request body contains JSON data. This is important because the server needs to know how to interpret the data you're sending.
+        //         * So, you're creating a StringContent object with your JSON data and specifying that it's in JSON format.
+        //         * var response = await client.PostAsync(baseUrl, content);:
+        //         * client.PostAsync(baseUrl, content) sends an HTTP POST request to the specified baseUrl with the JSON data included in the content variable as the request body.*/
+
+        //        if (response.IsSuccessStatusCode)
+        //        {
+        //            // Log or debug the response status code and content
+        //            var statusCode = response.StatusCode;
+        //            // Redirect to the "Book" action
+        //            return RedirectToAction("Book", "BoardModels");
+        //        }
+
+        //        else
+        //        {
+        //            // Handle the error appropriately
+        //            return View("Error");
+        //        }
+        //    }
+        //}
 
 
         // GET: Rentals/Edit/5
