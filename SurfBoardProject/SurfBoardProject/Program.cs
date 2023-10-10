@@ -73,21 +73,21 @@ namespace SurfBoardProject
 
                 // create roles
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-                var roles = new[] { "Admin", "Customer", "Administration" };
+                var roles = new[] { "Admin", "Customer", "Administration", "Guest" };
                 foreach (var role in roles)
                 {
 
                     // check if role exists and if they dont create them
                     //Here you can manually add a new user role to the DB
-                    if (!roleManager.RoleExistsAsync("Admin").Result)
+                    if (!roleManager.RoleExistsAsync("Customer").Result)
                     {
-                        roleManager.CreateAsync(new IdentityRole("Admin")).Wait();
+                        roleManager.CreateAsync(new IdentityRole("Customer")).Wait();
                     }
 
-                    if (!roleManager.RoleExistsAsync("Admin").Result)
-                    {
-                        roleManager.CreateAsync(new IdentityRole("Admin")).Wait();
-                    }
+                    //if (!roleManager.RoleExistsAsync("Admin").Result)
+                    //{
+                    //    roleManager.CreateAsync(new IdentityRole("Admin")).Wait();
+                    //}
                 }
 
                 // SeedData.Initialize(services); 

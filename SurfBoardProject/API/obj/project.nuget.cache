@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "n3Qfipe/3LauhxNkYJFD4sSzhjhdfT+HS/HMpsZE1mX4kHkulE7nzTzIJL5gqXh6PakDLmBQJeVLyqljrDuPlw==",
+  "dgSpecHash": "j0TU1xtWLacmp8lpWl7GSsFQap8mN9LwwOmNO5yMhfj97CZR2r23Oau0y1WbsN+ArGLYXKE3Vw5KDk6Zb9+zOQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\chris\\OneDrive\\Desktop\\Git Repository\\MVCSurf\\SurfBoardProject\\API\\API.csproj",
   "expectedPackageFiles": [
@@ -65,6 +65,7 @@
     "C:\\Users\\chris\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\6.0.21\\microsoft.aspnetcore.identity.ui.6.0.21.nupkg.sha512",
     "C:\\Users\\chris\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\6.0.22\\microsoft.aspnetcore.jsonpatch.6.0.22.nupkg.sha512",
     "C:\\Users\\chris\\.nuget\\packages\\microsoft.aspnetcore.mvc.newtonsoftjson\\6.0.22\\microsoft.aspnetcore.mvc.newtonsoftjson.6.0.22.nupkg.sha512",
+    "C:\\Users\\chris\\.nuget\\packages\\microsoft.aspnetcore.mvc.versioning\\5.1.0\\microsoft.aspnetcore.mvc.versioning.5.1.0.nupkg.sha512",
     "C:\\Users\\chris\\.nuget\\packages\\microsoft.aspnetcore.razor.language\\6.0.0\\microsoft.aspnetcore.razor.language.6.0.0.nupkg.sha512",
     "C:\\Users\\chris\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\5.0.0\\microsoft.bcl.asyncinterfaces.5.0.0.nupkg.sha512",
     "C:\\Users\\chris\\.nuget\\packages\\microsoft.build\\17.3.2\\microsoft.build.17.3.2.nupkg.sha512",

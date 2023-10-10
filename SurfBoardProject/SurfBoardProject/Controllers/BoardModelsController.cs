@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
+using Newtonsoft.Json;
 using SurfBoardProject.Data;
 using SurfBoardProject.Models;
 using SurfBoardProject.Models.Enum;
@@ -19,12 +21,16 @@ namespace SurfBoardProject.Controllers
     public class BoardModelsController : Controller
     {
         private readonly SurfBoardProjectContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly BoardService _boardService;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public BoardModelsController(SurfBoardProjectContext context, BoardService boardService)
+        public BoardModelsController(SurfBoardProjectContext context, BoardService boardService, IHttpClientFactory httpClientFactory, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _boardService = boardService;
+            _httpClientFactory = httpClientFactory;
+            _userManager = userManager;
         }
 
         // GET: BoardModels
@@ -119,30 +125,57 @@ namespace SurfBoardProject.Controllers
 
                 _context.SaveChanges();
 
-                //Delete booking if Rental has 0 has Availability
+                // Delete bookings if board's IsAvailable is set to 0
+                if (item.IsAvailable == 0)
+                {
+                    var bookingsToDelete = _context.Rental
+                        .Where(rental => rental.Boards.Any(board => board.IsAvailable == 0))
+                        .ToList();
 
-                //if(item.IsAvailable == 0)
-                //{
-                //    var deleteBook = _context.Rental
-                //        .Where(d => d.Boards.Any(board => board.IsAvailable == 0));
-                //    _context.Remove(deleteBook);
-                //}
+                    foreach (var booking in bookingsToDelete)
+                    {
+                        _context.Remove(booking);
+                    }
 
+                    _context.SaveChanges();
+                }
 
                 return RedirectToAction("Index");
             }
+
             return NotFound();
         }
 
         // [Authorize(Roles = "Customer")]
         //GET: BoardModel/Book
-
-        public async Task<IActionResult> Book(BoardModel board)
+        public async Task<IActionResult> Book()
         {
+            var userId = _userManager.GetUserId(User);
+            string userAccessPackage = "1.0";
 
-            //If any of the IsAvailable properties are 1 then disable the board in the list
-            IEnumerable<BoardModel> obj = _context.BoardModel.ToList();
-            return View(obj);
+            if (!string.IsNullOrEmpty(userId))
+            {
+                userAccessPackage = "2.0";
+            }
+
+            using (var client = new HttpClient())
+            {
+                string baseUrl = $"https://localhost:7161/api/rent?api-version={userAccessPackage}";
+
+                HttpResponseMessage response = await client.GetAsync(baseUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonContent = await response.Content.ReadAsStringAsync();
+                    var boards = JsonConvert.DeserializeObject<List<BoardModel>>(jsonContent);
+
+                    return View(boards);
+                }
+                else
+                {
+                    return View("Error");
+                }
+            }
         }
 
         //POST
@@ -214,6 +247,8 @@ namespace SurfBoardProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Length,Width,Volume,BoardType,Price,Equipment")] BoardModel boardModel)
         {
+            ModelState.Remove("RowVersion");
+            //                    ModelState.Remove("Rental.RowVersion");
 
             if (ModelState.IsValid)
             {
@@ -225,7 +260,7 @@ namespace SurfBoardProject.Controllers
             }
             else
             {
-                TempData["Error"] = "An Error has occured";
+                TempData["Error"] = "An Error has occured. Try again later";
 
             }
 
