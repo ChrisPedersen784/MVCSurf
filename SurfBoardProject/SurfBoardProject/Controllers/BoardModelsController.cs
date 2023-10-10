@@ -247,6 +247,8 @@ namespace SurfBoardProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Length,Width,Volume,BoardType,Price,Equipment")] BoardModel boardModel)
         {
+            ModelState.Remove("RowVersion");
+            //                    ModelState.Remove("Rental.RowVersion");
 
             if (ModelState.IsValid)
             {
@@ -258,7 +260,7 @@ namespace SurfBoardProject.Controllers
             }
             else
             {
-                TempData["Error"] = "An Error has occured";
+                TempData["Error"] = "An Error has occured. Try again later";
 
             }
 
