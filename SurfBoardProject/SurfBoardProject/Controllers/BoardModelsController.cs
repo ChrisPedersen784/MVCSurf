@@ -248,7 +248,6 @@ namespace SurfBoardProject.Controllers
         public async Task<IActionResult> Create([Bind("Id,Name,Length,Width,Volume,BoardType,Price,Equipment")] BoardModel boardModel)
         {
             ModelState.Remove("RowVersion");
-            //                    ModelState.Remove("Rental.RowVersion");
 
             if (ModelState.IsValid)
             {
