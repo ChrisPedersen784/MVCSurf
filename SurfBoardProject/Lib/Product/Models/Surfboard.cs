@@ -11,58 +11,40 @@ namespace Lib.Product.Models
     public class Surfboard
     {
 
-        public string Sku { get; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public double Length { get; set; }
+        public double Width { get; set; }
+        public double Volume { get; set; }
 
-        /// <summary>
-        /// Name of the product.
-        /// </summary>
-        public string Name { get; }
+        public string? ImgUrl { get; set; }
+        public string? BoardDescription { get; set; }
+        public double Price { get; set; }
+        public string? Equipment { get; set; }
+        public int IsAvailable { get; set; } = 0;
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
 
-        /// <summary>
-        /// Price of the product.
-        /// </summary>
-        public decimal Price { get; }
-
-        /// <summary>
-        /// The image path of the product.
-        /// </summary>
-        public string Image { get; }
-
-        /// <summary>
-        /// The route slug of the product.
-        /// </summary>
-        public string Slug
+        public Surfboard()
         {
-            get
-            {
-                return Sku.ToLower();
-            }
+            
         }
 
-        /// <summary>
-        /// The full URL of the product
-        /// </summary>
-        public string FullUrl
-        {
-            get
-            {
-                return string.Format("/product/{0}", Slug);
-            }
-        }
 
-        /// <summary>
-        /// Constructs a new product.
-        /// </summary>
-        /// <param name="sku">Unique identifier of the product.</param>
-        /// <param name="name">Name of the product.</param>
-        /// <param name="price">Price of the product.</param>
-        /// <param name="image">Image path of the product.</param>
-        public Surfboard(string sku, string name, decimal price, string image)
+
+        public Surfboard(int id, string name, double length, double width, double volume, double v, string? imgUrl, string boardDescription, double price, string equipment, int isAvailable, byte[] rowVersion)
         {
-            Sku = sku;
+            Id = id;
             Name = name;
+            Length = length;
+            Width = width;
+            Volume = volume;
+            ImgUrl = imgUrl;
+            BoardDescription = boardDescription;
             Price = price;
-            Image = image;
+            Equipment = equipment;
+            IsAvailable = isAvailable;
+            RowVersion = rowVersion;
         }
     }
 }

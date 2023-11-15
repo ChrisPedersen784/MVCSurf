@@ -42,6 +42,6 @@ namespace Lib.ShoppingCart
         /// </summary>
         /// <param name="sku">The unique identifier of the product.</param>
         /// <returns>A <see cref="bool"/> type which determines whether the product has been added to the shopping cart.</returns>
-        bool HasProduct(string sku);
+        bool HasProduct(int id);
     }
 }

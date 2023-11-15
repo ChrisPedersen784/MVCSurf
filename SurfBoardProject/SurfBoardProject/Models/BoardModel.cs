@@ -24,5 +24,7 @@ namespace SurfBoardProject.Models
         public byte[] RowVersion { get; set; }
         public ICollection<Rental>? Rentals { get; set; }
 
+
+
     }
 }

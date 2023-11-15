@@ -304,3 +304,5 @@ C:\Users\chris\OneDrive\Desktop\Git Repository\MVCSurf\SurfBoardProject\API\obj\
 C:\Users\chris\OneDrive\Desktop\Git Repository\MVCSurf\SurfBoardProject\API\obj\Debug\net6.0\API.pdb
 C:\Users\chris\OneDrive\Desktop\Git Repository\MVCSurf\SurfBoardProject\API\obj\Debug\net6.0\API.genruntimeconfig.cache
 C:\Users\chris\OneDrive\Desktop\Git Repository\MVCSurf\SurfBoardProject\API\obj\Debug\net6.0\ref\API.dll
+C:\Users\chris\OneDrive\Desktop\Git Repository\MVCSurf\SurfBoardProject\API\bin\Debug\net6.0\Lib.dll
+C:\Users\chris\OneDrive\Desktop\Git Repository\MVCSurf\SurfBoardProject\API\bin\Debug\net6.0\Lib.pdb

@@ -43,7 +43,7 @@ namespace Lib.ShoppingCart.Models
         public ShoppingCartItemModel(Surfboard product, int quantity)
         {
             Product = product;
-            Price = product.Price;
+            Price = Convert.ToDecimal(product.Price);
             Quantity = quantity;
         }
 
@@ -54,7 +54,7 @@ namespace Lib.ShoppingCart.Models
         /// <param name="quantity">Quantity of the product.</param>
         public void UpdateQuantity(Surfboard product, int quantity)
         {
-            Price = product.Price;
+            Price = Convert.ToDecimal(product.Price);
             Quantity += quantity;
         }
     }

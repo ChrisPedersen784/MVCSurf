@@ -20,5 +20,6 @@ namespace Lib.Storage
         /// </summary>
         ShoppingCartModel ShoppingCart { get; }
 
+
     }
 }

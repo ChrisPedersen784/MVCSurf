@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Lib.Product.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SurfBoardProject.Data;
@@ -20,29 +21,42 @@ namespace API.Controllers
             _context = context;
         }
 
-
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<IEnumerable<Surfboard>>> Get()
         {
-            try
+            if (_context.BoardModel == null)
             {
-                var rentals = await _context.BoardModel.ToListAsync();
-                var options = new JsonSerializerOptions
+                return NotFound();
+            }
+
+            var validSurfboards = await _context.BoardModel
+                .Where(surfboard => surfboard.Price <= 800)
+                .Select(board => new Surfboard
                 {
-                    ReferenceHandler = ReferenceHandler.Preserve,
-                };
+                    Id = board.Id,
+                    Name = board.Name,
+                    Length = board.Length,
+                    Width = board.Width,
+                    Volume = board.Volume,
+                    ImgUrl = board.ImgUrl,
+                    BoardDescription = board.BoardDescription,
+                    Price = board.Price,
+                    Equipment = board.Equipment,
+                    IsAvailable = board.IsAvailable,
+                    RowVersion = board.RowVersion
+                })
+                .ToListAsync();
 
-                var jsonSerialized = System.Text.Json.JsonSerializer.Serialize(rentals, options);
-
-
-                // Return JSON response
-                return Ok(jsonSerialized);
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions appropriately, e.g., log the error
-                return BadRequest(ex.Message);
-            }
+            return Ok(validSurfboards); // Use Ok() to return 200 OK status along with the data
         }
+
+
+
     }
 }
+
+
+
+
+
+
