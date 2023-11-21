@@ -25,6 +25,15 @@ namespace Lib.Product.Models
         [Timestamp]
         public byte[] RowVersion { get; set; }
 
+
+        public string FullUrl 
+        {
+            get
+            {
+                return string.Format("/product/{0}", Id.ToString().ToLower());
+            }
+        }
+
         public Surfboard()
         {
             

@@ -22,7 +22,7 @@ namespace Lib.Product
         /// </summary>
         /// <param name="slug">The slug of the product</param>
         /// <returns></returns>
-        Surfboard? GetById(int id);
+        Task<Surfboard?> GetByIdAsync(int id);
 
         /// <summary>
         /// Gets all products

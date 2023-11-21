@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace Lib.Product
@@ -12,6 +13,7 @@ namespace Lib.Product
     {
         private readonly IStorageService _storageService;
         private readonly HttpClient _httpClient;
+        private string baseUrl = "https://localhost:7161/api/shop";
 
         public ProductService(IStorageService storageService, HttpClient httpClient)
         {
@@ -24,9 +26,20 @@ namespace Lib.Product
             return _storageService.Surfboards.FirstOrDefault(p => p.Id == id);
         }
 
-        public Surfboard? GetById(int id)
+        public async Task<Surfboard?> GetByIdAsync(int id)
         {
-            return _storageService.Surfboards.FirstOrDefault(p => p.Id == id);
+            var surfById = new Surfboard() ;
+            HttpResponseMessage surfId = await _httpClient.GetAsync(baseUrl + id.ToString());
+
+            if (surfId.IsSuccessStatusCode)
+            {
+                var JsonResponse = await surfId.Content.ReadAsStringAsync();
+                surfById = JsonConvert.DeserializeObject<Surfboard?>(JsonResponse);
+
+            }
+
+                return surfById;
+           
         }
 
         // Updated GetAll() method to fetch surfboards from the API
@@ -35,7 +48,7 @@ namespace Lib.Product
             List<Surfboard> surfboards = new List<Surfboard>();
 
 
-            string baseUrl = "https://localhost:7161/api/shop";
+            //string baseUrl = "https://localhost:7161/api/shop";
 
 
             HttpResponseMessage response = await _httpClient.GetAsync(baseUrl);
@@ -59,6 +72,8 @@ namespace Lib.Product
         {
             return _storageService.Surfboards.ToList();
         }
+
+
     }
 }
 

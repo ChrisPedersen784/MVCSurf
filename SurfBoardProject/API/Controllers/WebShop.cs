@@ -50,7 +50,21 @@ namespace API.Controllers
             return Ok(validSurfboards); // Use Ok() to return 200 OK status along with the data
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetByIdAsync(int id)
+        {
+            if (_context.BoardModel == null)
+            {
+                return NotFound();
+            }
 
+            var surfboardById = await _context.BoardModel
+                    .Where(x => x.Id == id)
+                    .ToListAsync();
+
+            return Ok(surfboardById);
+
+        }
 
     }
 }
