@@ -1,0 +1,5 @@
+Kære udvikler
+
+Vores webshop kører strålende, men det kunne være fedt med en chatbot til at besvare almindelige spørgsmål, så som hvor lang tids levering der er, eller hvad fragtprisen er.
+
+Jeg kunne også godt tænke mig, at man kan bladre mellem forskellige billeder af samme board ved at klikke på billedet.
