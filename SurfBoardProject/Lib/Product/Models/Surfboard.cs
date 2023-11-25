@@ -30,8 +30,12 @@ namespace Lib.Product.Models
         {
             get
             {
-                return string.Format("/product/{0}", Id.ToString().ToLower());
+                return string.Format("/product/" + Id.ToString().ToLower());
             }
+            //set
+            //{
+            //    Id = int.Parse(value);
+            //}
         }
 
         public Surfboard()

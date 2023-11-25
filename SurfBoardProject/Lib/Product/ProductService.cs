@@ -29,17 +29,19 @@ namespace Lib.Product
         public async Task<Surfboard?> GetByIdAsync(int id)
         {
             var surfById = new Surfboard() ;
-            HttpResponseMessage surfId = await _httpClient.GetAsync(baseUrl + id.ToString());
+            HttpResponseMessage surfId = await _httpClient.GetAsync(baseUrl + "/" + id.ToString());
 
             if (surfId.IsSuccessStatusCode)
             {
-                var JsonResponse = await surfId.Content.ReadAsStringAsync();
-                surfById = JsonConvert.DeserializeObject<Surfboard?>(JsonResponse);
+                var jsonResponse = await surfId.Content.ReadAsStringAsync();
+                var surfArray = JsonConvert.DeserializeObject<Surfboard[]>(jsonResponse);
+
+                // Assuming your API returns an array, you might want to handle multiple items appropriately
+                surfById = surfArray?.FirstOrDefault();
+
 
             }
-
                 return surfById;
-           
         }
 
         // Updated GetAll() method to fetch surfboards from the API
@@ -57,7 +59,7 @@ namespace Lib.Product
             {
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 surfboards = JsonConvert.DeserializeObject<List<Surfboard>>(jsonResponse);
-
+                
                 return surfboards;  // Return the surfboards obtained from the API
             }
             else
