@@ -49,6 +49,10 @@ namespace API
                 .AddRoles<IdentityRole>() // Add support for roles
   .AddEntityFrameworkStores<SurfBoardProjectContext>();
 
+            builder.Services.AddLogging(builder =>
+            {
+                builder.AddConsole();//console Logging
+            });
 
             builder.Services.AddCors(options =>
             {
@@ -62,6 +66,7 @@ namespace API
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
+          //  builder.Services.AddScoped<ILogger>();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();

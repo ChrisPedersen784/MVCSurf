@@ -23,6 +23,7 @@ namespace SurfBoardProject.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IHttpClientFactory _httpClientFactory;
         private string _unAuthorizedUser = "44516742-ebe2-4454-9c14-b80d325c961e";
+        //private string _unAuthorizedUser = "44516742-ebe2-4454-9c14-b80d325c961";
 
         public RentalsController(SurfBoardProjectContext context, UserManager<IdentityUser> userManager, IHttpClientFactory httpClientFactory)
         {

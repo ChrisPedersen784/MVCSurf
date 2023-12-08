@@ -1,0 +1,40 @@
+2023-12-08 14:38:34.494 +01:00 [WRN] No store type was specified for the decimal property 'Price' on entity type 'Rental'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2023-12-08 14:38:36.965 +01:00 [INF] Executed DbCommand (111ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [BoardModel] AS [b]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2023-12-08 14:38:37.333 +01:00 [INF] User profile is available. Using 'C:\Users\chris\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2023-12-08 14:38:38.272 +01:00 [INF] Executed DbCommand (190ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedName_0
+2023-12-08 14:38:38.545 +01:00 [INF] Executed DbCommand (3ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedName_0
+2023-12-08 14:38:38.549 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedName_0
+2023-12-08 14:38:38.554 +01:00 [INF] Executed DbCommand (4ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedName_0
+2023-12-08 14:38:38.747 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-12-08 14:38:38.749 +01:00 [INF] Hosting environment: Development
+2023-12-08 14:38:38.749 +01:00 [INF] Content root path: C:\Users\chris\OneDrive\Desktop\Git Repository\MVCSurf\SurfBoardProject\SurfBoardProject\
+2023-12-08 14:38:38.843 +01:00 [INF] Request starting HTTP/2 GET https://localhost:44317/ - -
+2023-12-08 14:38:39.027 +01:00 [INF] Executing endpoint 'SurfBoardProject.Controllers.HomeController.Index (SurfBoardProject)'
+2023-12-08 14:38:39.068 +01:00 [INF] Route matched with {action = "Index", controller = "Home", page = "", area = ""}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller SurfBoardProject.Controllers.HomeController (SurfBoardProject).
+2023-12-08 14:38:39.207 +01:00 [INF] Executing action method SurfBoardProject.Controllers.HomeController.Index (SurfBoardProject) - Validation state: "Valid"
+2023-12-08 14:38:41.550 +01:00 [ERR] Fejl ved behandling af home index
+System.Exception: Dette er en fejl
+   at SurfBoardProject.Controllers.HomeController.Index() in C:\Users\chris\OneDrive\Desktop\Git Repository\MVCSurf\SurfBoardProject\SurfBoardProject\Controllers\HomeController.cs:line 20
+2023-12-08 14:38:41.614 +01:00 [INF] Executed action method SurfBoardProject.Controllers.HomeController.Index (SurfBoardProject), returned result Microsoft.AspNetCore.Mvc.BadRequestObjectResult in 2391.5215ms.
+2023-12-08 14:38:41.630 +01:00 [INF] Executing BadRequestObjectResult, writing value of type 'System.String'.
+2023-12-08 14:38:41.738 +01:00 [INF] Executed action SurfBoardProject.Controllers.HomeController.Index (SurfBoardProject) in 2655.3926ms
+2023-12-08 14:38:41.738 +01:00 [INF] Executed endpoint 'SurfBoardProject.Controllers.HomeController.Index (SurfBoardProject)'
+2023-12-08 14:38:41.756 +01:00 [INF] Request finished HTTP/2 GET https://localhost:44317/ - - - 400 - text/plain;+charset=utf-8 2928.0800ms

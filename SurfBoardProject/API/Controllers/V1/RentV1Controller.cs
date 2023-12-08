@@ -17,11 +17,13 @@ namespace API.Controllers.V1
     {
         private readonly SurfBoardProjectContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ILogger<RentV1Controller> _logger;
 
-        public RentV1Controller(SurfBoardProjectContext context, UserManager<IdentityUser> userManager)
+        public RentV1Controller(SurfBoardProjectContext context, UserManager<IdentityUser> userManager, ILogger<RentV1Controller> logger)
         {
             _context = context;
             _userManager = userManager;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -53,6 +55,9 @@ namespace API.Controllers.V1
         {
             try
             {
+                // Simuler en fejl, f.eks. ved at kaste en undtagelse
+                throw new Exception("Dette er en testfejl i GetRental-metoden.");
+
                 // Use the userId parameter to filter rentals
                 var rentals = await _context.Rental
                 .Where(r => r.Customers.Any(c => c.UserId == userId) && r.Boards.Any(ren => ren.IsAvailable != 0))
@@ -72,6 +77,7 @@ namespace API.Controllers.V1
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error Processing API Request");
                 return BadRequest(ex);
             }
         }

@@ -6,6 +6,8 @@ using SurfBoardProject.Models;
 using SurfBoardProject.Utility;
 using System.Globalization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace SurfBoardProject
 {
@@ -29,6 +31,11 @@ namespace SurfBoardProject
 
             builder.Services.AddScoped<BoardService>();
             builder.Services.AddHttpClient();
+
+
+            builder.Host.UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
+             .WriteTo.Console()
+             .WriteTo.File("C:\\Users\\chris\\OneDrive\\Desktop\\Git Repository\\MVCSurf\\SurfBoardProject\\SurfBoardProject\\Log_Messages.txt"));
 
             var app = builder.Build();
 

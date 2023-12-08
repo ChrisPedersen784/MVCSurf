@@ -15,6 +15,15 @@ namespace SurfBoardProject.Controllers
 
         public IActionResult Index()
         {
+            try
+            {
+                throw new Exception("Dette er en fejl");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Fejl ved behandling af home index");
+                return BadRequest("Intern fejl");
+            }
             return View();
         }
 
